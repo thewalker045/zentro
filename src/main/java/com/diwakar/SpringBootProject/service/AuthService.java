@@ -1,10 +1,13 @@
 package com.diwakar.SpringBootProject.service;
 
+import com.diwakar.SpringBootProject.dto.LoginRequest;
 import com.diwakar.SpringBootProject.dto.RegisterRequest;
 import com.diwakar.SpringBootProject.model.Users;
 import com.diwakar.SpringBootProject.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,4 +38,22 @@ public class AuthService {
 
     }
 
-}
+
+
+
+        @Autowired
+        private AuthenticationManager authenticationManager;
+
+        public String login(LoginRequest request) {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            return "Login Successful";
+        }
+    }
+

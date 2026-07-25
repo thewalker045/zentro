@@ -1,5 +1,6 @@
 package com.diwakar.SpringBootProject.controller;
 
+import com.diwakar.SpringBootProject.dto.LoginRequest;
 import com.diwakar.SpringBootProject.dto.RegisterRequest;
 import com.diwakar.SpringBootProject.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,16 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("User created successfully");
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @RequestBody LoginRequest request){
+
+        return ResponseEntity.ok(
+                service.login(request)
+        );
 
     }
 }
