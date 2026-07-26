@@ -22,12 +22,7 @@ public class MyUserDetailsService
 
         Users user =
                 repo.findByEmail(email)
-                        .orElseThrow(
-                                () ->
-                                        new UsernameNotFoundException(
-                                                "User Not Found"
-                                        )
-                        );
+                        .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
         return new UserPrincipal(user);
 

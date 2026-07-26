@@ -1,59 +1,62 @@
 package com.diwakar.SpringBootProject.service;
 
+import com.diwakar.SpringBootProject.config.JwtService;
+import com.diwakar.SpringBootProject.dto.AuthResponse;
 import com.diwakar.SpringBootProject.dto.LoginRequest;
 import com.diwakar.SpringBootProject.dto.RegisterRequest;
 import com.diwakar.SpringBootProject.model.Users;
 import com.diwakar.SpringBootProject.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AuthService {
+
     @Autowired
     private UserRepo repo;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean register(@RequestBody RegisterRequest request){
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
 
-        if(repo.existsByEmail(request.getEmail()))
+    public boolean register(RegisterRequest request) {
+
+        if (repo.existsByEmail(request.getEmail())) {
             return false;
+        }
 
-        Users user=new Users();
-        user.setEmail(request.getEmail());
+        Users user = new Users();
         user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER_ROLE");
 
         repo.save(user);
 
         return true;
-
-
     }
 
 
+    public AuthResponse login(LoginRequest request) {
 
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
 
-        @Autowired
-        private AuthenticationManager authenticationManager;
+        String token = jwtService.generateToken(request.getEmail());
 
-        public String login(LoginRequest request) {
-
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );
-
-            return "Login Successful";
-        }
+        return new AuthResponse(token);
     }
-
+}
