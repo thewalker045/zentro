@@ -55,8 +55,14 @@ public class AuthService {
                 )
         );
 
-        String token = jwtService.generateToken(request.getEmail());
+        Users user = repo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return new AuthResponse(token);
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new AuthResponse(
+                token,
+                user.getRole()
+        );
     }
 }
