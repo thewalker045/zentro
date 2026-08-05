@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface CartRepo extends JpaRepository<Cart,Integer> {
     Optional<Cart> findByUserAndProduct(Users user, Product product);
+    public Cart findByIdAndUser(int id,Users user);
 }

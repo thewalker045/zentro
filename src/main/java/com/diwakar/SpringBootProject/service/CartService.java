@@ -59,4 +59,20 @@ public class CartService {
 
 
     }
+
+    public void removeCart( int CartId) {
+
+        Authentication authentication =SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        String email=authentication.getName();
+        Users user=UserRepo.findByEmail(email).orElseThrow();
+
+        Cart cart= CartRepo.findByIdAndUser(CartId,user);
+
+        CartRepo.delete(cart);
+
+
+
+    }
 }
