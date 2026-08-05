@@ -20,12 +20,15 @@ public class MyUserDetailsService
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        Users user =
-                repo.findByEmail(email)
-                        .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+        Users user = repo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+
+        System.out.println("======================");
+        System.out.println("Email : " + user.getEmail());
+        System.out.println("Role  : " + user.getRole());
+        System.out.println(user);
+        System.out.println("======================");
 
         return new UserPrincipal(user);
-
     }
-
 }
