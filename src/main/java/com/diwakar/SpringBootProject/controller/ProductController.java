@@ -25,7 +25,7 @@ public class ProductController {
                 service.getProducts(),
                 HttpStatus.OK
         );
-    }
+    }//new commit
 
     @PostMapping("/addProducts")
     public ResponseEntity<String> addProducts(@RequestPart ProductRequest request,
@@ -36,7 +36,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping ("/updateProducts/{id}")
+    @PutMapping ("/{id}")
     public ResponseEntity<String> updateProducts(@RequestPart ProductRequest request,
                                                  @RequestPart(required = false) MultipartFile image,
                                                  @PathVariable Integer id)
